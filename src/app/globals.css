@@ -1,0 +1,49 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         hsl(30, 5%, 5%);
+  --bg-warm:    hsl(30, 6%, 7%);
+  --fg:         hsl(30, 18%, 91%);
+  --fg-dim:     hsl(30, 10%, 64%);
+  --fg-muted:   hsl(30, 7%, 38%);
+  --gold:       hsl(43, 55%, 60%);
+  --gold-dim:   hsl(43, 40%, 33%);
+  --border:     hsl(30, 5%, 10%);
+  --border-mid: hsl(30, 5%, 16%);
+  --font-d:     var(--font-display, "Courier New", monospace);
+  --font-b:     var(--font-body,    "Courier New", monospace);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-b), "Courier New", monospace;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+::selection { background: var(--gold-dim); color: var(--fg); }
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-mid); }
+
+/* Scroll-reveal utility */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}

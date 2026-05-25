@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      target: deps          # only install deps for dev
+    image: tim-wix-dev
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app              # live reload via bind mount
+      - /app/node_modules   # keep container node_modules
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      # Wix credentials — copy .env.example to .env and fill in
+      - WIX_CLIENT_ID=${WIX_CLIENT_ID:-}
+      - WIX_ACCOUNT_ID=${WIX_ACCOUNT_ID:-}
