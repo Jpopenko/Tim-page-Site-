@@ -55,15 +55,16 @@ Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format
 ## Blockers & To-dos
 
 ### Blockers
-- **Gallery has only 4 unique photos** — gallery is capped at 4 cards (no repeats allowed). To expand it, upload more Tim Page war photos to Wix Media Manager, then add the new `wixstatic.com` URLs to the `WIX` array and new entries to `PHOTOS` in `page.tsx`.
 - **Wix API token needs regenerating** — the IST token was shared in plain text during setup. Should be revoked and replaced from Wix Dev Center.
 
 ### To-dos
-- **[Waiting on content]** Upload more Tim Page war photography to Wix Media Manager → add URLs to `WIX` array → add entries to `PHOTOS` in `page.tsx`
 - Set up a GitHub remote and push
-- Verify the avif image (`WIX[3]`) renders correctly in all browsers
+- Verify the avif image (`cf7196_281e175d3145477a9a33b42a49ffb825~mv2.avif`, photo #30) renders correctly in all browsers
 - Real contact form backend (currently front-end only — form submission just flips a "done" state)
 - Social links (Facebook/Instagram hrefs are placeholder `#` targets)
+
+### Resolved
+- ~~Gallery has only 4 unique photos~~ — 276 images discovered across 13 Wix Media Manager folders (Vietnam, Cambodia, Laos, Afghanistan, Cuba); gallery now has 30 unique images, one per card
 
 ## Git workflow
 
