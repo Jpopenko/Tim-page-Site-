@@ -864,6 +864,23 @@
   .footerTop { flex-direction: column; align-items: flex-start; }
 }
 
+@media (max-width: 768px) {
+  .galViewport {
+    height: 280px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .galViewport::-webkit-scrollbar { display: none; }
+  .galTrack { width: max-content; }
+  .galCard {
+    min-width: 120px;
+    scroll-snap-align: start;
+  }
+}
+
 @media (max-width: 560px) {
   .galCard { height: 180px; }
   .heroCtas { flex-direction: column; align-items: center; }

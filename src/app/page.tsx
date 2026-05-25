@@ -21,6 +21,12 @@ function useInView(threshold = 0.12) {
   return [ref, inView] as const;
 }
 
+/* ─── Wix CDN portrait crop ─────────────────────────── */
+function wixThumb(url: string, w: number, h: number, q = 90): string {
+  const filename = url.split("/").pop()!;
+  return `${url}/v1/fill/w_${w},h_${h},al_c,q_${q},enc_webp/${filename}`;
+}
+
 /* ─── Photos ────────────────────────────────────────── */
 // Gallery — 30 unique images drawn from Tim Page's full archive on Wix
 const PHOTOS = [
@@ -192,8 +198,6 @@ function Ticker() {
 }
 
 /* ─── Gallery constants ──────────────────────────────── */
-const BASE_H = 460;
-const HOV_H  = 680;
 const SIGMA2 = 2.5; // Gaussian spread — single smooth peak, no secondary humps
 
 /* ─── Gallery (static row + hover ripple + lightbox) ── */
@@ -201,6 +205,15 @@ function Gallery() {
   const [hov, setHov] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(null);
   const [ref, inView] = useInView(0.05);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  const BASE_H = isMobile ? 280 : 460;
+  const HOV_H  = isMobile ? 280 : 680;
 
   useEffect(() => {
     if (open === null) return;
@@ -239,11 +252,11 @@ function Gallery() {
                   aria-label={`View ${p.tag} photograph`}
                 >
                   <Image
-                    src={p.src}
+                    src={wixThumb(p.src, 256, 1440)}
                     alt={`Tim Page — ${p.tag}`}
                     fill
-                    sizes="96px"
-                    quality={80}
+                    sizes="128px"
+                    quality={90}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
                     style={{ objectFit: "cover" }}
                     priority={i < 4}
