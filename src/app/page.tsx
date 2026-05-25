@@ -476,7 +476,7 @@ function Contact() {
                 <label className={s.field}><span>Name *</span><input name="name" type="text" required placeholder="Full name" /></label>
                 <label className={s.field}><span>Email *</span><input name="email" type="email" required placeholder="your@email.com" /></label>
               </div>
-              <label className={s.field}><span>Image</span><input name="image" type="text" placeholder="Describe the image or reference number" /></label>
+              <label className={s.field}><span>Image</span><input name="image" type="text" placeholder="Describe the image" /></label>
               {intent === "license" && (
                 <label className={s.field}><span>Usage</span>
                   <select name="usage">
@@ -486,17 +486,6 @@ function Contact() {
                     <option>Book / publication</option>
                     <option>Documentary / film</option>
                     <option>Exhibition</option>
-                  </select>
-                </label>
-              )}
-              {intent === "purchase" && (
-                <label className={s.field}><span>Print size</span>
-                  <select name="size">
-                    <option value="">Select size</option>
-                    <option>Small — 30×40 cm</option>
-                    <option>Medium — 50×70 cm</option>
-                    <option>Large — 70×100 cm</option>
-                    <option>Museum — 100×150 cm+</option>
                   </select>
                 </label>
               )}
