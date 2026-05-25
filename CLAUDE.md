@@ -55,11 +55,11 @@ Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format
 ## Blockers & To-dos
 
 ### Blockers
-- **Gallery has only 4 unique photos** — the 30-card gallery cycles through the same 4 war images. More Tim Page photos need to be uploaded to Wix Media Manager before the gallery looks its best.
+- **Gallery has only 4 unique photos** — gallery is capped at 4 cards (no repeats allowed). To expand it, upload more Tim Page war photos to Wix Media Manager, then add the new `wixstatic.com` URLs to the `WIX` array and new entries to `PHOTOS` in `page.tsx`.
 - **Wix API token needs regenerating** — the IST token was shared in plain text during setup. Should be revoked and replaced from Wix Dev Center.
 
 ### To-dos
-- Upload more Tim Page war photography to Wix Media Manager, then add the new `wixstatic.com` URLs to the `WIX` array in `page.tsx`
+- **[Waiting on content]** Upload more Tim Page war photography to Wix Media Manager → add URLs to `WIX` array → add entries to `PHOTOS` in `page.tsx`
 - Set up a GitHub remote and push
 - Verify the avif image (`WIX[3]`) renders correctly in all browsers
 - Real contact form backend (currently front-end only — form submission just flips a "done" state)

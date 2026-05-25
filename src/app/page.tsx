@@ -29,37 +29,12 @@ const WIX = [
   "https://static.wixstatic.com/media/cf7196_281e175d3145477a9a33b42a49ffb825~mv2.avif",  // archive photo
 ];
 
+// 4 cards — one per unique image. Add new WIX entries + PHOTOS entries as more images are uploaded.
 const PHOTOS = [
-  { id: 1,  src: WIX[0], loc: "Saigon",             year: "1968", tag: "Vietnam"    },
-  { id: 2,  src: WIX[1], loc: "Hué Citadel",        year: "1968", tag: "Vietnam"    },
-  { id: 3,  src: WIX[2], loc: "Mekong Delta",       year: "1969", tag: "Vietnam"    },
-  { id: 4,  src: WIX[3], loc: "Plain of Jars",      year: "1970", tag: "Laos"       },
-  { id: 5,  src: WIX[0], loc: "Khe Sanh",           year: "1968", tag: "Vietnam"    },
-  { id: 6,  src: WIX[1], loc: "Tet Offensive",      year: "1968", tag: "Vietnam"    },
-  { id: 7,  src: WIX[2], loc: "Phnom Penh",         year: "1973", tag: "Cambodia"   },
-  { id: 8,  src: WIX[3], loc: "Quảng Trị",         year: "1972", tag: "Vietnam"    },
-  { id: 9,  src: WIX[0], loc: "Belfast",            year: "1971", tag: "N. Ireland" },
-  { id: 10, src: WIX[1], loc: "Chu Lai",            year: "1965", tag: "Vietnam"    },
-  { id: 11, src: WIX[2], loc: "Nha Trang",          year: "1966", tag: "Vietnam"    },
-  { id: 12, src: WIX[3], loc: "Angkor Wat",         year: "1972", tag: "Cambodia"   },
-  { id: 13, src: WIX[0], loc: "Vientiane",          year: "1970", tag: "Laos"       },
-  { id: 14, src: WIX[1], loc: "Hanoi",              year: "1973", tag: "Vietnam"    },
-  { id: 15, src: WIX[2], loc: "Beirut",             year: "1982", tag: "Lebanon"    },
-  { id: 16, src: WIX[3], loc: "Long Binh",          year: "1966", tag: "Vietnam"    },
-  { id: 17, src: WIX[0], loc: "Saigon Rooftop",     year: "1975", tag: "Vietnam"    },
-  { id: 18, src: WIX[1], loc: "Mekong River",       year: "1971", tag: "Vietnam"    },
-  { id: 19, src: WIX[2], loc: "Phnom Penh Fall",    year: "1975", tag: "Cambodia"   },
-  { id: 20, src: WIX[3], loc: "Quảng Ngãi",        year: "1967", tag: "Vietnam"    },
-  { id: 21, src: WIX[0], loc: "Da Nang Evacuation", year: "1975", tag: "Vietnam"    },
-  { id: 22, src: WIX[1], loc: "Hội An",            year: "1968", tag: "Vietnam"    },
-  { id: 23, src: WIX[2], loc: "Bien Hoa",           year: "1966", tag: "Vietnam"    },
-  { id: 24, src: WIX[3], loc: "Kontum",             year: "1972", tag: "Vietnam"    },
-  { id: 25, src: WIX[0], loc: "An Loc",             year: "1972", tag: "Vietnam"    },
-  { id: 26, src: WIX[1], loc: "Siem Reap",          year: "1973", tag: "Cambodia"   },
-  { id: 27, src: WIX[2], loc: "Luang Prabang",      year: "1971", tag: "Laos"       },
-  { id: 28, src: WIX[3], loc: "Cu Chi Tunnels",     year: "1967", tag: "Vietnam"    },
-  { id: 29, src: WIX[0], loc: "Derry",              year: "1972", tag: "N. Ireland" },
-  { id: 30, src: WIX[1], loc: "Da Nang",            year: "1967", tag: "Vietnam"    },
+  { id: 1, src: WIX[0], loc: "Saigon",       year: "1968", tag: "Vietnam" },
+  { id: 2, src: WIX[1], loc: "Hué Citadel",  year: "1968", tag: "Vietnam" },
+  { id: 3, src: WIX[2], loc: "Mekong Delta", year: "1969", tag: "Vietnam" },
+  { id: 4, src: WIX[3], loc: "Plain of Jars",year: "1970", tag: "Laos"    },
 ];
 
 const TICKER = "VIETNAM · CAMBODIA · LAOS · NORTHERN IRELAND · MIDDLE EAST · 1960–2022 · WAR PHOTOGRAPHER · TIM PAGE · ARCHIVE · ";
