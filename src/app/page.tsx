@@ -254,6 +254,7 @@ function Gallery() {
                     src={p.src}
                     alt={`Tim Page — ${p.tag}`}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
+                    loading="lazy"
                   />
                   <div className={`${s.galOverlay} ${hov === i ? s.galOverlayOn : ""}`}>
                     <span className={s.galTag}>{p.tag}</span>
