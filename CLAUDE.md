@@ -52,6 +52,19 @@ curl -X GET "https://www.wixapis.com/site-media/v1/files?limit=100" \
 ```
 Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format must be `IST.eyJ...`.
 
+## Blockers & To-dos
+
+### Blockers
+- **Gallery has only 4 unique photos** — the 30-card gallery cycles through the same 4 war images. More Tim Page photos need to be uploaded to Wix Media Manager before the gallery looks its best.
+- **Wix API token needs regenerating** — the IST token was shared in plain text during setup. Should be revoked and replaced from Wix Dev Center.
+
+### To-dos
+- Upload more Tim Page war photography to Wix Media Manager, then add the new `wixstatic.com` URLs to the `WIX` array in `page.tsx`
+- Set up a GitHub remote and push
+- Verify the avif image (`WIX[3]`) renders correctly in all browsers
+- Real contact form backend (currently front-end only — form submission just flips a "done" state)
+- Social links (Facebook/Instagram hrefs are placeholder `#` targets)
+
 ## Git workflow
 
 Commit after every change or major feature — don't batch multiple unrelated changes into one commit.
