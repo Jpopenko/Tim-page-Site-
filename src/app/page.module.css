@@ -741,6 +741,7 @@
 .field input::placeholder, .field textarea::placeholder { color: var(--fg-muted); opacity: 0.5; }
 .field select option { background: var(--bg); }
 
+.formError { color: #e05; font-size: 0.85rem; margin: 0; }
 .thanks { display: flex; flex-direction: column; gap: 1.25rem; }
 .thanksTitle {
   font-family: var(--font-d), monospace;

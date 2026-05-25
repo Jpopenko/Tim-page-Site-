@@ -405,7 +405,37 @@ type Intent = "license" | "purchase" | "press" | "other";
 function Contact() {
   const [intent, setIntent] = useState<Intent>("license");
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [ref, inView] = useInView();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    const data = new FormData(e.currentTarget);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name:    data.get("name"),
+          email:   data.get("email"),
+          image:   data.get("image") || undefined,
+          intent,
+          usage:   data.get("usage")   || undefined,
+          size:    data.get("size")    || undefined,
+          message: data.get("message") || undefined,
+        }),
+      });
+      if (!res.ok) throw new Error("failed");
+      setDone(true);
+    } catch {
+      setError("Something went wrong — please try again or email us directly.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <section
@@ -432,7 +462,7 @@ function Contact() {
               <button className={s.btnGhost} onClick={() => setDone(false)}>Send another</button>
             </div>
           ) : (
-            <form className={s.form} onSubmit={(e) => { e.preventDefault(); setDone(true); }}>
+            <form className={s.form} onSubmit={handleSubmit}>
               <div className={s.intentRow}>
                 {(["license","purchase","press","other"] as Intent[]).map((v) => (
                   <button key={v} type="button"
@@ -443,13 +473,13 @@ function Contact() {
                 ))}
               </div>
               <div className={s.fRow}>
-                <label className={s.field}><span>Name *</span><input type="text" required placeholder="Full name" /></label>
-                <label className={s.field}><span>Email *</span><input type="email" required placeholder="your@email.com" /></label>
+                <label className={s.field}><span>Name *</span><input name="name" type="text" required placeholder="Full name" /></label>
+                <label className={s.field}><span>Email *</span><input name="email" type="email" required placeholder="your@email.com" /></label>
               </div>
-              <label className={s.field}><span>Image</span><input type="text" placeholder="Describe the image or reference number" /></label>
+              <label className={s.field}><span>Image</span><input name="image" type="text" placeholder="Describe the image or reference number" /></label>
               {intent === "license" && (
                 <label className={s.field}><span>Usage</span>
-                  <select>
+                  <select name="usage">
                     <option value="">Select use</option>
                     <option>Magazine / newspaper</option>
                     <option>Online editorial</option>
@@ -461,7 +491,7 @@ function Contact() {
               )}
               {intent === "purchase" && (
                 <label className={s.field}><span>Print size</span>
-                  <select>
+                  <select name="size">
                     <option value="">Select size</option>
                     <option>Small — 30×40 cm</option>
                     <option>Medium — 50×70 cm</option>
@@ -470,8 +500,11 @@ function Contact() {
                   </select>
                 </label>
               )}
-              <label className={s.field}><span>Message</span><textarea rows={4} placeholder="Context, deadlines, questions…" /></label>
-              <button type="submit" className={s.btnPrimary}>Send Enquiry →</button>
+              <label className={s.field}><span>Message</span><textarea name="message" rows={4} placeholder="Context, deadlines, questions…" /></label>
+              {error && <p className={s.formError}>{error}</p>}
+              <button type="submit" className={s.btnPrimary} disabled={submitting}>
+                {submitting ? "Sending…" : "Send Enquiry →"}
+              </button>
             </form>
           )}
         </div>
