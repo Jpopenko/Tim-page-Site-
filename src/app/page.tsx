@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import s from "./page.module.css";
 
 /* ─── Scroll-reveal hook ────────────────────────────── */
@@ -18,14 +19,6 @@ function useInView(threshold = 0.12) {
     return () => obs.disconnect();
   }, [threshold]);
   return [ref, inView] as const;
-}
-
-/* ─── Wix CDN transform ─────────────────────────────── */
-// Appends Wix's v1/fill transform to resize + convert to WebP.
-// Requires both w and h; al_c = center-crop.
-function wixThumb(url: string, w: number, h: number, q = 85): string {
-  const filename = url.split("/").pop()!;
-  return `${url}/v1/fill/w_${w},h_${h},al_c,q_${q},enc_webp/${filename}`;
 }
 
 /* ─── Photos ────────────────────────────────────────── */
@@ -245,13 +238,15 @@ function Gallery() {
                   onClick={() => setOpen(i)}
                   aria-label={`View ${p.tag} photograph`}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={wixThumb(p.src, 640, 680)}
+                  <Image
+                    src={p.src}
                     alt={`Tim Page — ${p.tag}`}
+                    fill
+                    sizes="96px"
+                    quality={80}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
-                    loading="lazy"
-                    fetchPriority={i < 4 ? "high" : "auto"}
+                    style={{ objectFit: "cover" }}
+                    priority={i < 4}
                   />
                   <div className={`${s.galOverlay} ${hov === i ? s.galOverlayOn : ""}`}>
                     <span className={s.galTag}>{p.tag}</span>
@@ -334,8 +329,16 @@ function About() {
     >
       <div className={s.aboutInner}>
         <div className={s.aboutImg}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={wixThumb("https://static.wixstatic.com/media/cf7196_7052e0062608420fa071915befa8546a~mv2.jpeg", 600, 750)} alt="Tim Page" className={s.aboutPhoto} loading="lazy" />
+          <Image
+            src="https://static.wixstatic.com/media/cf7196_7052e0062608420fa071915befa8546a~mv2.jpeg"
+            alt="Tim Page"
+            width={680}
+            height={907}
+            sizes="340px"
+            quality={85}
+            className={s.aboutPhoto}
+            style={{ width: "100%", height: "auto" }}
+          />
         </div>
         <div className={s.aboutText}>
           <p className={s.eyebrow}><span className={s.eyebrowLine} />About Tim</p>
