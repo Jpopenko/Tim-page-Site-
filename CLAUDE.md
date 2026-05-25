@@ -52,6 +52,10 @@ curl -X GET "https://www.wixapis.com/site-media/v1/files?limit=100" \
 ```
 Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format must be `IST.eyJ...`.
 
+## Git workflow
+
+Commit after every change or major feature — don't batch multiple unrelated changes into one commit.
+
 ## Production build
 
 ```bash
