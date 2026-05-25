@@ -15,3 +15,7 @@ out/
 
 # misc
 *.log
+tsconfig.tsbuildinfo
+playwright-check.js
+tim-page-playground.html
+Web images /
