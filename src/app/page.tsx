@@ -450,8 +450,7 @@ function Contact() {
           <p>The Tim Page archive is available for editorial licensing, fine-art print purchase, and exhibition use. All enquiries are handled by the estate.</p>
           <p>Please describe the image and intended use as precisely as possible. We aim to respond within 48 hours.</p>
           <div className={s.contactDetails}>
-            <div className={s.contactRow}><span className={s.clabel}>Estate</span>estate@timpagephoto.com</div>
-            <div className={s.contactRow}><span className={s.clabel}>Press</span>press@timpagephoto.com</div>
+            <div className={s.contactRow}><span className={s.clabel}>Email</span>marianne@timpagephoto.com</div>
           </div>
         </div>
         <div className={s.contactRight}>
