@@ -176,12 +176,6 @@ function Nav({ active, scrollTo }: { active: string; scrollTo: (id: string) => v
 function Hero({ scrollTo }: { scrollTo: (id: string) => void }) {
   return (
     <section id="hero" className={s.hero}>
-      <div className={s.heroBody}>
-        <h1 className={s.heroName}>Tim Page</h1>
-        <p className={s.heroSub}>
-          War Photographer &nbsp;·&nbsp; 1944 – 2022<span className={s.cursor}>_</span>
-        </p>
-      </div>
       <button className={s.scrollCue} onClick={() => scrollTo("work")} aria-label="Scroll down">
         <span className={s.scrollLine} />
       </button>
