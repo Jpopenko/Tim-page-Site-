@@ -20,6 +20,14 @@ function useInView(threshold = 0.12) {
   return [ref, inView] as const;
 }
 
+/* ─── Wix CDN transform ─────────────────────────────── */
+// Appends Wix's v1/fill transform to resize + convert to WebP.
+// Requires both w and h; al_c = center-crop.
+function wixThumb(url: string, w: number, h: number, q = 85): string {
+  const filename = url.split("/").pop()!;
+  return `${url}/v1/fill/w_${w},h_${h},al_c,q_${q},enc_webp/${filename}`;
+}
+
 /* ─── Photos ────────────────────────────────────────── */
 // Gallery — 30 unique images drawn from Tim Page's full archive on Wix
 const PHOTOS = [
@@ -239,10 +247,11 @@ function Gallery() {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={p.src}
+                    src={wixThumb(p.src, 640, 680)}
                     alt={`Tim Page — ${p.tag}`}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
                     loading="lazy"
+                    fetchPriority={i < 4 ? "high" : "auto"}
                   />
                   <div className={`${s.galOverlay} ${hov === i ? s.galOverlayOn : ""}`}>
                     <span className={s.galTag}>{p.tag}</span>
@@ -326,7 +335,7 @@ function About() {
       <div className={s.aboutInner}>
         <div className={s.aboutImg}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://static.wixstatic.com/media/cf7196_7052e0062608420fa071915befa8546a~mv2.jpeg" alt="Tim Page" className={s.aboutPhoto} />
+          <img src={wixThumb("https://static.wixstatic.com/media/cf7196_7052e0062608420fa071915befa8546a~mv2.jpeg", 600, 750)} alt="Tim Page" className={s.aboutPhoto} loading="lazy" />
         </div>
         <div className={s.aboutText}>
           <p className={s.eyebrow}><span className={s.eyebrowLine} />About Tim</p>
