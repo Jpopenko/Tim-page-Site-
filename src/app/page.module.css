@@ -129,12 +129,8 @@
 ───────────────────────────────────────────────────── */
 .hero {
   position: relative;
-  padding: 10rem 2.75rem 3.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
+  padding: 0;
+  height: 0;
 }
 
 .heroBody { }
@@ -210,7 +206,8 @@
    GALLERY (horizontal marquee inside vertical page)
 ───────────────────────────────────────────────────── */
 .galSec {
-  padding: 4rem 0 5rem;
+  /* centres the 740px gallery in the viewport; clamps to 4rem on small screens */
+  padding: max(4rem, calc(50vh - 370px)) 0 5rem;
 }
 
 .galIntro {

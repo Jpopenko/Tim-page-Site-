@@ -107,7 +107,7 @@ export default function Home() {
       <Nav active={active} scrollTo={scrollTo} />
 
       <main>
-        <Hero scrollTo={scrollTo} />
+        <Hero />
         <Gallery />
         <About />
         <Media />
@@ -173,14 +173,8 @@ function Nav({ active, scrollTo }: { active: string; scrollTo: (id: string) => v
 }
 
 /* ─── Hero ──────────────────────────────────────────── */
-function Hero({ scrollTo }: { scrollTo: (id: string) => void }) {
-  return (
-    <section id="hero" className={s.hero}>
-      <button className={s.scrollCue} onClick={() => scrollTo("work")} aria-label="Scroll down">
-        <span className={s.scrollLine} />
-      </button>
-    </section>
-  );
+function Hero() {
+  return <section id="hero" className={s.hero} />;
 }
 
 /* ─── Ticker ────────────────────────────────────────── */
