@@ -326,7 +326,7 @@ function About() {
           <h2 className={s.aboutTitle}>The Frontline Lens</h2>
           <p>Timothy John Page (25 May 1944 – 24 August 2022) was a British war photographer renowned for his coverage of the Vietnam War. His unflinching images defined a generation&apos;s understanding of modern conflict.</p>
           <p>Beginning his career in the early 1960s, Page embedded with US and South Vietnamese forces, sustaining multiple near-fatal wounds in pursuit of the truth. His work appeared in <em>Time</em>, <em>Life</em>, <em>Paris Match</em>, and across the world&apos;s front pages.</p>
-          <p>His 1988 book <em>Tim Page&apos;s Nam</em> remains a landmark in photojournalism. Francis Ford Coppola&apos;s photojournalist in <em>Apocalypse Now</em> is widely said to be inspired by Page.</p>
+          <p>His 1983 book <em>Tim Page&apos;s Nam</em> remains a landmark in photojournalism. Michael Herr — whose 1977 memoir <em>Dispatches</em> features Page prominently — co-wrote the <em>Apocalypse Now</em> screenplay and modelled Dennis Hopper&apos;s gonzo photojournalist character on Page.</p>
           <div className={s.pressRow}>
             {["Time","Life","Paris Match","Rolling Stone","The Guardian"].map((p) => (
               <span key={p} className={s.pressChip}>{p}</span>
@@ -344,11 +344,11 @@ function Media() {
   const publications = [
     "Time", "Life", "Paris Match", "Rolling Stone",
     "The Guardian", "Newsweek", "AP", "The Sunday Times",
-    "Der Spiegel", "Stern", "The New York Times", "Magnum Photos",
+    "Der Spiegel", "Stern", "The New York Times", "Crawdaddy",
   ];
   const features = [
-    { label: "Rolling Stone, 1973", quote: "The closest thing to a rock star the world of photojournalism has ever produced." },
-    { label: "Apocalypse Now, 1979", quote: "Francis Ford Coppola's photojournalist character is widely said to be inspired by Page." },
+    { label: "Dispatches — Michael Herr, 1977", quote: "I'd heard about him even before I came to Vietnam: 'Look him up. If he's still alive.'" },
+    { label: "Apocalypse Now, 1979", quote: "Michael Herr, who wrote Dispatches and co-wrote the Apocalypse Now screenplay, modelled Dennis Hopper's gonzo photojournalist character on Page." },
     { label: "Tim Page's Nam, 1983", quote: "His landmark book remains one of the defining documents of the Vietnam War era." },
   ];
   return (
