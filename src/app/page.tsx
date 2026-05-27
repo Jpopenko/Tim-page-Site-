@@ -28,49 +28,22 @@ function wixThumb(url: string, w: number, h: number, q = 90): string {
 }
 
 /* ─── Photos ────────────────────────────────────────── */
-// Gallery — 30 unique images drawn from Tim Page's full archive on Wix
 const PHOTOS = [
-  // Nam Box Set folder
   { id: 1,  src: "https://static.wixstatic.com/media/cf7196_f1439a16bade441a823deb4bb22decb0~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 2,  src: "https://static.wixstatic.com/media/cf7196_9bb6057028a949a6a9507621856e4706~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 3,  src: "https://static.wixstatic.com/media/cf7196_f672487768064dadb78d2c3e0d1deda9~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 4,  src: "https://static.wixstatic.com/media/cf7196_1f3b4edaabb247f39bf425a0af821a2a~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  // ROKS in Nam folder
-  { id: 5,  src: "https://static.wixstatic.com/media/cf7196_ef8fe2effd674f8b9f8d1d4bad4fb882~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  // Nam Box Set folder (cont.)
-  { id: 6,  src: "https://static.wixstatic.com/media/cf7196_9de7a9db98d841f3a62fc1d17961de28~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 7,  src: "https://static.wixstatic.com/media/cf7196_8aa5f16178874baf8faf999360079f19~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 8,  src: "https://static.wixstatic.com/media/cf7196_95faa9cb95244281bad0eb2a0b504051~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 9,  src: "https://static.wixstatic.com/media/cf7196_72c4316252a1463a911711288314febb~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 10, src: "https://static.wixstatic.com/media/cf7196_db30a4c9d4894fff90d3f9568c2e2bcd~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 11, src: "https://static.wixstatic.com/media/cf7196_086003e865904c968f8fa44cd84540f4~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  // Cambodia folder
-  { id: 12, src: "https://static.wixstatic.com/media/cf7196_8d485fbb01874f3ca2776ddbbd1af57c~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  // Nam Box Set folder (cont.)
-  { id: 13, src: "https://static.wixstatic.com/media/cf7196_ddaea12172e347c9b9360982323b1dc6~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 14, src: "https://static.wixstatic.com/media/cf7196_aa45704010954c968ba44335430bb8b7~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 15, src: "https://static.wixstatic.com/media/cf7196_9672b1e30f3e4e219f083dd7ab813b5a~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 16, src: "https://static.wixstatic.com/media/cf7196_5c5f65d218474081a2fd66c8bcdc3e50~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 17, src: "https://static.wixstatic.com/media/cf7196_d9c5f2823a8549a19575fd3a9c17810b~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  // Laos '64 folder — year confirmed from folder name
-  { id: 18, src: "https://static.wixstatic.com/media/cf7196_f313bd3436ed4c7486c7625d7b0486d1~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
-  { id: 19, src: "https://static.wixstatic.com/media/cf7196_97cc50001ebc4d21b9c7825c8e74ecf2~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
-  { id: 20, src: "https://static.wixstatic.com/media/cf7196_bcb63d3909e64814a32fbf8f6dae9208~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
-  // Cambodia folder
-  { id: 21, src: "https://static.wixstatic.com/media/cf7196_36ac4138fc9e472eaad4f08c03f4e430~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  { id: 22, src: "https://static.wixstatic.com/media/cf7196_ed338448c6dc44b8ad9ab90dc7291c9e~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  { id: 23, src: "https://static.wixstatic.com/media/cf7196_f22f632fe3ee4eb6b03af40c9ae48c0a~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  // Landmines folder (Cambodia)
-  { id: 24, src: "https://static.wixstatic.com/media/cf7196_738bbb610aa5406c9f60c4246ab36e0a~mv2.jpg",  loc: "Cambodia",    tag: "Landmines"   },
-  // Afghanistan folder
-  { id: 25, src: "https://static.wixstatic.com/media/cf7196_c094fc6c464b4c2a8402f8049101c90c~mv2.jpg",  loc: "Afghanistan", tag: "Afghanistan" },
-  // Cuba folder
-  { id: 26, src: "https://static.wixstatic.com/media/cf7196_9738d9b202be49a08df9412640d0d9d6~mv2.jpg",  loc: "Cuba",        tag: "Cuba"        },
-  { id: 27, src: "https://static.wixstatic.com/media/cf7196_cc8c11b3e3a6400ba512d731f7399144~mv2.jpg",  loc: "Cuba",        tag: "Cuba"        },
-  // Root-level Wix images
-  { id: 28, src: "https://static.wixstatic.com/media/cf7196_f030896d28ff486fb1cdeeacf32d0a22~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 29, src: "https://static.wixstatic.com/media/cf7196_e634e457f71d488f9132d7ffcf23df5b~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 30, src: "https://static.wixstatic.com/media/cf7196_047f3e5f1d6342de92e329f8cf29547a~mv2.webp", loc: "Vietnam",     tag: "Vietnam"     },
+  { id: 5,  src: "https://static.wixstatic.com/media/cf7196_95faa9cb95244281bad0eb2a0b504051~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
+  { id: 6,  src: "https://static.wixstatic.com/media/cf7196_72c4316252a1463a911711288314febb~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
+  { id: 7,  src: "https://static.wixstatic.com/media/cf7196_f030896d28ff486fb1cdeeacf32d0a22~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
+  { id: 8,  src: "https://static.wixstatic.com/media/cf7196_8d485fbb01874f3ca2776ddbbd1af57c~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
+  { id: 9,  src: "https://static.wixstatic.com/media/cf7196_36ac4138fc9e472eaad4f08c03f4e430~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
+  { id: 10, src: "https://static.wixstatic.com/media/cf7196_ed338448c6dc44b8ad9ab90dc7291c9e~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
+  { id: 11, src: "https://static.wixstatic.com/media/cf7196_f313bd3436ed4c7486c7625d7b0486d1~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
+  { id: 12, src: "https://static.wixstatic.com/media/cf7196_97cc50001ebc4d21b9c7825c8e74ecf2~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
+  { id: 13, src: "https://static.wixstatic.com/media/cf7196_bcb63d3909e64814a32fbf8f6dae9208~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
+  { id: 14, src: "https://static.wixstatic.com/media/cf7196_c094fc6c464b4c2a8402f8049101c90c~mv2.jpg",  loc: "Afghanistan", tag: "Afghanistan" },
+  { id: 15, src: "https://static.wixstatic.com/media/cf7196_9738d9b202be49a08df9412640d0d9d6~mv2.jpg",  loc: "Cuba",        tag: "Cuba"        },
 ];
 
 const TICKER = "VIETNAM · CAMBODIA · LAOS · NORTHERN IRELAND · MIDDLE EAST · 1960–2022 · WAR PHOTOGRAPHER · TIM PAGE · ARCHIVE · ";
@@ -162,12 +135,7 @@ function Nav({ active, scrollTo }: { active: string; scrollTo: (id: string) => v
         ))}
       </div>
       <div className={s.navSocial}>
-        <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-          </svg>
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+        <a href="https://www.instagram.com/timpagephoto/?hl=en" target="_blank" rel="noreferrer" aria-label="Instagram">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="2" y="2" width="20" height="20" rx="5"/>
             <circle cx="12" cy="12" r="4"/>
@@ -255,7 +223,7 @@ function Gallery() {
                     src={wixThumb(p.src, 256, 1440)}
                     alt={`Tim Page — ${p.tag}`}
                     fill
-                    sizes="128px"
+                    sizes="(min-width: 1200px) 200px, 128px"
                     quality={90}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
                     style={{ objectFit: "cover" }}
@@ -526,8 +494,7 @@ function Footer({ scrollTo }: { scrollTo: (id: string) => void }) {
           ))}
         </div>
         <div className={s.footerSocial}>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer">Facebook</a>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://www.instagram.com/timpagephoto/?hl=en" target="_blank" rel="noreferrer">Instagram</a>
         </div>
       </div>
       <div className={s.footerBottom}>
