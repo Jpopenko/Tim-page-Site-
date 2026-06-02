@@ -431,7 +431,7 @@ function Contact() {
           <p>The Tim Page archive is available for editorial licensing, fine-art print purchase, and exhibition use. All enquiries are handled by the estate.</p>
           <p>Please describe the image and intended use as precisely as possible. We aim to respond within 48 hours.</p>
           <div className={s.contactDetails}>
-            <div className={s.contactRow}><span className={s.clabel}>Email</span>marianne@timpagephoto.com</div>
+            <div className={s.contactRow}><span className={s.clabel}>Email</span><a href="mailto:timpagephoto@bigpond.com">timpagephoto@bigpond.com</a></div>
           </div>
         </div>
         <div className={s.contactRight}>
@@ -498,7 +498,7 @@ function Footer({ scrollTo }: { scrollTo: (id: string) => void }) {
         </div>
       </div>
       <div className={s.footerBottom}>
-        <p>© {new Date().getFullYear()} The Official Site for Tim Page.</p>
+        <p>© {new Date().getFullYear()} The Official Site for Tim Page. · <a href="/privacy">Privacy Policy</a></p>
         <p>Images may not be reproduced without written permission from the estate.</p>
       </div>
     </footer>
