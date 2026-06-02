@@ -121,7 +121,12 @@
 .navLinkActive  { color: var(--gold) !important; }
 
 .navSocial { display: flex; gap: 1rem; align-items: center; }
-.navSocial a { color: var(--fg-muted); display: flex; transition: color 0.15s; }
+.navSocial a {
+  color: var(--fg-muted);
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin: -14px;
+  transition: color 0.15s;
+}
 .navSocial a:hover { color: var(--gold); }
 
 /* ─────────────────────────────────────────────────────
