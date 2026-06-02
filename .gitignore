@@ -23,4 +23,7 @@ Web images /
 # local test artifacts
 .playwright-mcp/
 mobile-*.jpeg
+m-*.jpeg
+*-390.jpeg
+live-*.jpeg
 .vercel
