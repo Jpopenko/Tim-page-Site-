@@ -19,3 +19,7 @@ tsconfig.tsbuildinfo
 playwright-check.js
 tim-page-playground.html
 Web images /
+
+# local test artifacts
+.playwright-mcp/
+mobile-*.jpeg
