@@ -55,16 +55,19 @@ Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format
 ## Blockers & To-dos
 
 ### Blockers
-- **Wix API token needs regenerating** — the IST token was shared in plain text during setup. Should be revoked and replaced from Wix Dev Center.
+- **Wix API token should still be rotated (security hygiene)** — the IST token was shared in plain text during setup. It is *valid and working* (verified live 2026-06-02) and is stored only in `.env.local` + Vercel encrypted env, but because it was once exposed it should be revoked and replaced from the Wix Dev Center, then updated in `.env.local` and `vercel env`.
 
 ### To-dos
-- Set up a GitHub remote and push
+- Attach a custom domain in Vercel when ready; then set `NEXT_PUBLIC_SITE_URL` env var to it (currently falls back to `https://timpage.com` for OG/canonical) and redeploy.
 - Verify the avif image (`cf7196_281e175d3145477a9a33b42a49ffb825~mv2.avif`, photo #30) renders correctly in all browsers
-- Real contact form backend (currently front-end only — form submission just flips a "done" state)
-- Social links (Facebook/Instagram hrefs are placeholder `#` targets)
+- Optional: bump Next.js (npm audit flags framework-level advisories; only fix is the breaking `next@16` major — defer to a planned upgrade).
 
 ### Resolved
 - ~~Gallery has only 4 unique photos~~ — 276 images discovered across 13 Wix Media Manager folders (Vietnam, Cambodia, Laos, Afghanistan, Cuba); gallery now has 30 unique images, one per card
+- ~~Set up a GitHub remote and push~~ — live at `Jpopenko/Tim-page-Site-`.
+- ~~Real contact form backend~~ — `/api/contact` creates a Wix CRM contact + note via `@wix/sdk`/`@wix/crm`; verified end-to-end on production 2026-06-02.
+- ~~Social links placeholder~~ — Instagram points to the real `timpagephoto` account; Facebook removed.
+- ~~Deploy~~ — **LIVE** on Vercel (`studioclu` team, project `tim`) at `https://tim-khaki.vercel.app`, auto-deploys from GitHub `main`. Production env vars `WIX_API_KEY` + `WIX_SITE_ID` set (encrypted).
 
 ## Git workflow
 
