@@ -300,6 +300,78 @@
   padding: max(4rem, calc(50vh - 370px)) 0 5rem;
 }
 
+/* ── Mobile carousel ──────────────────────────────────
+   Same photographs, real aspect ratio. Hidden on desktop;
+   the slat row is hidden below 768px. Only one of the two
+   is ever in the layout, so the hidden one's lazy images
+   never enter the viewport and never download. */
+.galMobile { display: none; }
+
+.mobTrack {
+  display: flex;
+  gap: 0.85rem;
+  padding: 0 7vw;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.mobTrack::-webkit-scrollbar { display: none; }
+
+.mobSlide {
+  flex: 0 0 86vw;
+  scroll-snap-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: crosshair;
+}
+
+.mobFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--bg-warm);
+  border: 1px solid var(--border-mid);
+}
+.mobImg { object-fit: cover; }
+
+.mobCap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.15rem 0;
+}
+.mobTag {
+  font-family: var(--font-b), monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.mobLoc {
+  font-family: var(--font-b), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  text-align: right;
+}
+
+.mobHint {
+  font-family: var(--font-b), monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
 .galIntro {
   font-family: var(--font-b), monospace;
   font-size: 0.72rem;
@@ -974,7 +1046,6 @@
   .heroEyebrow { margin-bottom: 1.1rem; }
   .heroLine { font-size: 0.78rem; margin-top: 1.2rem; max-width: 34ch; }
   .scrollCue { right: 1.5rem; bottom: 1.25rem; }
-  .galCard { height: 220px; }
   .aboutInner { grid-template-columns: 1fr; gap: 3rem; }
   .aboutImg { position: static; }
   .contactInner { grid-template-columns: 1fr; gap: 3rem; }
@@ -984,24 +1055,14 @@
 }
 
 @media (max-width: 768px) {
-  .galViewport {
-    height: 280px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-  }
-  .galViewport::-webkit-scrollbar { display: none; }
-  .galTrack { width: max-content; }
-  .galCard {
-    min-width: 120px;
-    scroll-snap-align: start;
-  }
+  /* Swap the slat row out for the carousel. */
+  .galDesktop { display: none; }
+  .galMobile  { display: block; }
+  .galSec     { padding: 4rem 0 4.5rem; }
+  .galIntro   { margin-top: 2.75rem; }
 }
 
 @media (max-width: 560px) {
-  .galCard { height: 180px; }
   .heroCtas { flex-direction: column; align-items: center; }
   .heroName { font-size: clamp(2.1rem, 11vw, 3rem); }
 }

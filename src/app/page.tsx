@@ -212,15 +212,11 @@ function Gallery() {
   const [hov, setHov] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(null);
   const [ref, inView] = useInView(0.05);
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  const BASE_H = isMobile ? 280 : 460;
-  const HOV_H  = isMobile ? 280 : 680;
+
+  /* Desktop slat heights. Mobile no longer shares this markup — it gets its
+     own carousel below — so these are unconditional. */
+  const BASE_H = 460;
+  const HOV_H  = 680;
 
   useEffect(() => {
     if (open === null) return;
@@ -243,6 +239,8 @@ function Gallery() {
         ref={ref as React.RefObject<HTMLElement>}
         className={`${s.galSec} reveal ${inView ? "reveal-in" : ""}`}
       >
+        {/* Desktop: the slat row + ripple. Locked design — do not replace. */}
+        <div className={s.galDesktop}>
         <div className={s.galViewport} onMouseLeave={() => setHov(null)}>
           <div className={s.galTrack}>
             {PHOTOS.map((p, i) => {
@@ -276,6 +274,40 @@ function Gallery() {
             })}
           </div>
         </div>
+        </div>
+
+        {/* Mobile: the slats exist to make the ripple read, and there is no
+            ripple without a cursor — so mobile gets the same photographs as a
+            swipeable carousel at a real aspect ratio instead of slivers. */}
+        <div className={s.galMobile}>
+          <div className={s.mobTrack}>
+            {PHOTOS.map((p, i) => (
+              <button
+                key={p.id}
+                className={s.mobSlide}
+                onClick={() => setOpen(i)}
+                aria-label={`View ${p.tag} photograph`}
+              >
+                <div className={s.mobFrame}>
+                  <Image
+                    src={wixThumb(p.src, 1000, 667)}
+                    alt={`Tim Page — ${p.tag}`}
+                    fill
+                    sizes="86vw"
+                    quality={86}
+                    className={s.mobImg}
+                  />
+                </div>
+                <div className={s.mobCap}>
+                  <span className={s.mobTag}>{p.loc}</span>
+                  {p.year && <span className={s.mobLoc}>{p.year}</span>}
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className={s.mobHint}>Swipe · tap to enlarge</p>
+        </div>
+
         <p className={s.galIntro}>A selection of images from the frontlines — Vietnam, Cambodia, Laos, and beyond.</p>
         <Ticker />
       </section>
