@@ -531,6 +531,21 @@
 }
 
 /* Viewport: fixed height, padded sides, no scroll */
+/* The track runs past the right edge. Without a cue that reads as
+   deliberate, the clip looks like a bug rather than an invitation. */
+.galDesktop { position: relative; }
+.galDesktop::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 9rem;
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(to right, transparent, var(--bg) 88%);
+}
+
 .galViewport {
   overflow: visible;
   height: 740px;

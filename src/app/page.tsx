@@ -288,9 +288,16 @@ function Gallery() {
   const BASE_H = 460;
   const HOV_H  = 680;
 
+  const prev = () => setOpen(o => o !== null ? (o - 1 + PHOTOS.length) % PHOTOS.length : null);
+  const next = () => setOpen(o => o !== null ? (o + 1) % PHOTOS.length : null);
+
   useEffect(() => {
     if (open === null) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+      else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+    };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
@@ -299,8 +306,13 @@ function Gallery() {
     };
   }, [open]);
 
-  const prev = () => setOpen(o => o !== null ? (o - 1 + PHOTOS.length) % PHOTOS.length : null);
-  const next = () => setOpen(o => o !== null ? (o + 1) % PHOTOS.length : null);
+  /* Warm the neighbours so stepping through doesn't wait on a full-size
+     fetch each time. Browser cache does the rest. */
+  useEffect(() => {
+    if (open === null) return;
+    [(open + 1) % PHOTOS.length, (open - 1 + PHOTOS.length) % PHOTOS.length]
+      .forEach((i) => { const im = new window.Image(); im.src = PHOTOS[i].src; });
+  }, [open]);
 
   return (
     <>
