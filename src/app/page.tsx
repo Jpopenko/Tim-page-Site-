@@ -87,7 +87,7 @@ export default function Home() {
       <Nav active={active} scrollTo={scrollTo} />
 
       <main>
-        <Hero />
+        <Hero scrollTo={scrollTo} />
         <Gallery />
         <About />
         <Media />
@@ -148,8 +148,47 @@ function Nav({ active, scrollTo }: { active: string; scrollTo: (id: string) => v
 }
 
 /* ─── Hero ──────────────────────────────────────────── */
-function Hero() {
-  return <section id="hero" className={s.hero} />;
+/* The arrival image. Swap this index to change the hero —
+   3 = the B&W column (default), 2 = pink smoke marker,
+   5 = orange dust. Indexes are PHOTOS ids, not positions. */
+const HERO_PHOTO_ID = 3;
+
+function Hero({ scrollTo }: { scrollTo: (id: string) => void }) {
+  const photo = PHOTOS.find((p) => p.id === HERO_PHOTO_ID) ?? PHOTOS[0];
+
+  return (
+    <section id="hero" className={s.hero}>
+      <div className={s.heroFrame}>
+        <Image
+          src={wixThumb(photo.src, 2000, 1250, 88)}
+          alt={`Tim Page — ${photo.tag}`}
+          fill
+          sizes="100vw"
+          quality={88}
+          priority
+          className={s.heroImg}
+        />
+        <div className={s.heroVeil} aria-hidden />
+        <div className={s.heroScrim} aria-hidden />
+      </div>
+
+      <div className={s.heroBody}>
+        <p className={s.heroEyebrow}>The Official Archive</p>
+        <h1 className={s.heroName}>Tim Page</h1>
+        <p className={s.heroSub}>
+          1944–2022 · War Photographer<span className={s.cursor}>_</span>
+        </p>
+        <p className={s.heroLine}>
+          Photographs from Vietnam, Cambodia, Laos and beyond. Print sales,
+          editorial licensing and press enquiries.
+        </p>
+      </div>
+
+      <button className={s.scrollCue} onClick={() => scrollTo("work")} aria-label="Scroll to the work">
+        <span className={s.scrollLine} />
+      </button>
+    </section>
+  );
 }
 
 /* ─── Ticker ────────────────────────────────────────── */
@@ -227,7 +266,6 @@ function Gallery() {
                     quality={90}
                     className={`${s.galImg} ${hov === i ? s.galImgColor : ""}`}
                     style={{ objectFit: "cover" }}
-                    priority={i < 4}
                   />
                   <div className={`${s.galOverlay} ${hov === i ? s.galOverlayOn : ""}`}>
                     <span className={s.galTag}>{p.tag}</span>
