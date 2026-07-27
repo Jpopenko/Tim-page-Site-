@@ -374,7 +374,13 @@
   background: none;
   border: none;
   cursor: crosshair;
-  padding: 0;
+  /* The cue itself is a 1px hairline — pad it out to a real tap target
+     rather than asking anyone to hit a 1px-wide button. */
+  padding: 0 22px;
+  min-height: 44px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 .scrollLine {
   display: block;
@@ -1094,6 +1100,22 @@
   .dots { display: none; }
   .navBurger { display: block; }
   .menu { display: flex; }
+
+  /* Touch targets: pad the interactive text out to 44px on touch widths
+     without touching the desktop's visual density. */
+  .navLogo,
+  .footerLogo,
+  .footerLinks button,
+  .footerSocial a,
+  .footerBottom a,
+  .contactRow a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .footerLinks { flex-wrap: wrap; gap: 0 1.1rem; }
+  .footerLinks button { padding-inline: 8px; }
+  .iBtn { min-height: 44px; }
 
   .heroBody { padding: 0 1.5rem 4.5rem; }
   .heroEyebrow { margin-bottom: 1.1rem; }
