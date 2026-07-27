@@ -858,7 +858,33 @@
 @media (max-width: 860px) {
   .nav { padding: 1rem 1.5rem; }
   .navLinks { display: none; }
-  .dots { display: none; }
+
+  /* The dots are the only route to Contact until the overlay menu lands.
+     Visual dot stays 5px; the button grows to a 44px tap target. */
+  .dots {
+    right: 0;
+    gap: 0;
+    pointer-events: none;
+  }
+  .dot {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    pointer-events: auto;
+  }
+  .dot::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-mid);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dotActive { background: transparent; transform: none; }
+  .dotActive::before { background: var(--gold); transform: scale(1.5); }
+
   .heroBody { padding: 8rem 1.5rem 5rem; }
   .galCard { height: 220px; }
   .aboutInner { grid-template-columns: 1fr; gap: 3rem; }
