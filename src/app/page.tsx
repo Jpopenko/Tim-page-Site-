@@ -406,38 +406,12 @@ function Gallery() {
   );
 }
 
-/* ─── Quote ─────────────────────────────────────────── */
-function Quote() {
-  const [ref, inView] = useInView();
-  return (
-    <section
-      id="story"
-      ref={ref as React.RefObject<HTMLElement>}
-      className={`${s.quote} reveal ${inView ? "reveal-in" : ""}`}
-    >
-      <div
-        className={s.quoteBg}
-        style={{ backgroundImage: "url(https://picsum.photos/seed/tp-story/1600/900)" }}
-        aria-hidden
-      />
-      <div className={s.quoteOverlay} aria-hidden />
-      <div className={s.quoteBody}>
-        <p className={s.quoteEra}>1944 – 2022</p>
-        <blockquote className={s.quoteText}>
-          He was the closest thing to a rock star the world of photojournalism has ever produced.
-        </blockquote>
-        <p className={s.quoteAttr}>— Rolling Stone, 1973</p>
-        <div className={s.quoteFacts}>
-          {[["50+","Years in the field"],["12","Major conflicts"],["∞","Images in archive"]].map(([n,l]) => (
-            <div key={l} className={s.fact}>
-              <span>{n}</span>{l}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+/* Removed: an orphaned Quote() section (never rendered — absent from <main>,
+   its id="story" absent from SECTION_IDS). It carried a picsum.photos stock
+   placeholder plus unverified figures ("50+ years", "12 major conflicts") and
+   a Rolling Stone quote attributed to 1973. If the estate supplies a sourced
+   quote and real numbers it can come back; invented metrics must not ship on
+   a memorial site for a real person. See reviews/IMPROVEMENT-BRIEF.md P1-6. */
 
 /* ─── About ─────────────────────────────────────────── */
 function About() {
@@ -450,16 +424,28 @@ function About() {
     >
       <div className={s.aboutInner}>
         <div className={s.aboutImg}>
+          {/* Source is 3998x2248 (16:9). It was declared 680x907, a portrait
+              ratio it never had — wrong intrinsic hint, and the reserved box
+              never matched the image. */}
           <Image
             src="https://static.wixstatic.com/media/cf7196_7052e0062608420fa071915befa8546a~mv2.jpeg"
-            alt="Tim Page"
-            width={680}
-            height={907}
-            sizes="340px"
+            alt="Tim Page on assignment, photographing through a doorway"
+            width={1600}
+            height={900}
+            sizes="(max-width: 860px) 100vw, 470px"
             quality={85}
             className={s.aboutPhoto}
             style={{ width: "100%", height: "auto" }}
           />
+          <span className={s.aboutCaption}>Tim Page on assignment</span>
+
+          {/* Lives in this column so the landscape photograph isn't left
+              floating above a column of dead space. */}
+          <div className={s.pressRow}>
+            {["Time","Life","Paris Match","Rolling Stone","The Guardian"].map((p) => (
+              <span key={p} className={s.pressChip}>{p}</span>
+            ))}
+          </div>
         </div>
         <div className={s.aboutText}>
           <p className={s.eyebrow}><span className={s.eyebrowLine} />About Tim</p>
@@ -467,11 +453,6 @@ function About() {
           <p>Timothy John Page (25 May 1944 – 24 August 2022) was a British war photographer renowned for his coverage of the Vietnam War. His unflinching images defined a generation&apos;s understanding of modern conflict.</p>
           <p>Beginning his career in the early 1960s, Page embedded with US and South Vietnamese forces, sustaining multiple near-fatal wounds in pursuit of the truth. His work appeared in <em>Time</em>, <em>Life</em>, <em>Paris Match</em>, and across the world&apos;s front pages.</p>
           <p>His 1983 book <em>Tim Page&apos;s Nam</em> remains a landmark in photojournalism. Michael Herr — whose 1977 memoir <em>Dispatches</em> features Page prominently — co-wrote the <em>Apocalypse Now</em> screenplay and modelled Dennis Hopper&apos;s gonzo photojournalist character on Page.</p>
-          <div className={s.pressRow}>
-            {["Time","Life","Paris Match","Rolling Stone","The Guardian"].map((p) => (
-              <span key={p} className={s.pressChip}>{p}</span>
-            ))}
-          </div>
         </div>
       </div>
     </section>
@@ -547,6 +528,7 @@ function Contact() {
           usage:   data.get("usage")   || undefined,
           size:    data.get("size")    || undefined,
           message: data.get("message") || undefined,
+          company: data.get("company") || undefined, // honeypot
         }),
       });
       if (!res.ok) throw new Error("failed");
@@ -583,6 +565,14 @@ function Contact() {
             </div>
           ) : (
             <form className={s.form} onSubmit={handleSubmit}>
+              {/* Honeypot — hidden from people and from assistive tech, so
+                  anything that arrives in it came from a bot. */}
+              <div className={s.hp} aria-hidden>
+                <label>
+                  Company
+                  <input name="company" type="text" tabIndex={-1} autoComplete="off" />
+                </label>
+              </div>
               <div className={s.intentRow}>
                 {(["license","purchase","press","other"] as Intent[]).map((v) => (
                   <button key={v} type="button"

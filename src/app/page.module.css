@@ -73,6 +73,16 @@
 }
 .btnGhost:hover { border-color: var(--gold); color: var(--gold); }
 
+/* Honeypot: off-screen rather than display:none, since some bots skip
+   fields that are explicitly hidden. */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* ─────────────────────────────────────────────────────
    NAV
 ───────────────────────────────────────────────────── */
@@ -708,86 +718,6 @@
 .lbPrev:hover, .lbNext:hover { color: var(--gold); border-color: var(--gold-dim); }
 
 /* ─────────────────────────────────────────────────────
-   QUOTE / STORY
-───────────────────────────────────────────────────── */
-.quote {
-  position: relative;
-  min-height: 70vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-.quoteBg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(100%) contrast(1.2) brightness(0.55);
-  transform: scale(1.04);
-}
-.quoteOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg,
-    rgba(13,12,10,0.92) 0%,
-    rgba(13,12,10,0.65) 50%,
-    rgba(13,12,10,0.88) 100%);
-}
-.quoteBody {
-  position: relative;
-  z-index: 2;
-  padding: 6rem 8vw;
-  max-width: 860px;
-}
-.quoteEra {
-  font-family: var(--font-b), monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 2rem;
-}
-.quoteText {
-  font-family: var(--font-d), monospace;
-  font-size: clamp(1.6rem, 3.5vw, 2.75rem);
-  line-height: 1.28;
-  color: var(--fg);
-  font-style: italic;
-  margin-bottom: 1.75rem;
-  letter-spacing: -0.01em;
-}
-.quoteAttr {
-  font-family: var(--font-b), monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 4rem;
-}
-.quoteFacts {
-  display: flex;
-  gap: 3.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  flex-wrap: wrap;
-}
-.fact {
-  font-family: var(--font-b), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  color: var(--fg-dim);
-  line-height: 1.5;
-}
-.fact span {
-  display: block;
-  font-family: var(--font-d), monospace;
-  font-size: 2.25rem;
-  color: var(--fg);
-  line-height: 1;
-  margin-bottom: 0.3rem;
-}
-
-/* ─────────────────────────────────────────────────────
    ABOUT
 ───────────────────────────────────────────────────── */
 .about {
@@ -798,8 +728,10 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 5.5rem;
+  /* Was a fixed 340px column, which treated a strong photograph of Tim
+     shooting as a thumbnail and left a dead void beneath it. */
+  grid-template-columns: clamp(360px, 36%, 470px) 1fr;
+  gap: 4.5rem;
   align-items: start;
 }
 .aboutImg { position: sticky; top: 5.5rem; }
@@ -809,6 +741,18 @@
   transition: filter 0.9s ease;
 }
 .aboutPhoto:hover { filter: grayscale(0%) contrast(1); }
+
+.aboutCaption {
+  display: block;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border-mid);
+  font-family: var(--font-b), monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
 
 .aboutText {}
 .aboutTitle {
@@ -822,9 +766,11 @@
 .aboutText p {
   font-size: 0.9375rem;
   color: var(--fg-dim);
-  line-height: 1.9;
-  margin-bottom: 1.25rem;
-  max-width: 580px;
+  line-height: 1.95;
+  margin-bottom: 1.4rem;
+  /* Monospace reads slower than a proportional face, so hold the measure
+     shorter than the 65-75ch you'd allow a serif. */
+  max-width: 54ch;
 }
 .aboutText em { color: var(--fg); font-style: italic; }
 
@@ -1142,7 +1088,6 @@
   .aboutImg { position: static; }
   .contactInner { grid-template-columns: 1fr; gap: 3rem; }
   .fRow { grid-template-columns: 1fr; }
-  .quoteFacts { gap: 2rem; }
   .footerTop { flex-direction: column; align-items: flex-start; }
 }
 
