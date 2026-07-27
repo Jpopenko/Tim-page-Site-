@@ -79,7 +79,10 @@
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 200;
+  /* Above .menu (300): the nav has z-index so it forms a stacking context,
+     and the close button can't escape it — the whole bar must sit on top or
+     the only way out of the overlay is the Escape key. */
+  z-index: 320;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -128,6 +131,115 @@
   transition: color 0.15s;
 }
 .navSocial a:hover { color: var(--gold); }
+
+/* ── Mobile menu ──────────────────────────────────────
+   Five anchors on one page, so a full-screen overlay
+   suits the aesthetic better than a sliding drawer. */
+.navBurger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  margin: -14px -10px -14px 0;
+  background: none;
+  border: none;
+  cursor: crosshair;
+  position: relative;
+  z-index: 320;
+}
+.burgerBar {
+  display: block;
+  width: 22px;
+  height: 1px;
+  margin: 0 auto;
+  background: var(--fg);
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s;
+}
+.burgerBar + .burgerBar { margin-top: 6px; }
+.burgerBarTop { transform: translateY(3.5px) rotate(45deg); }
+.burgerBarMid { transform: translateY(-3.5px) rotate(-45deg); }
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(10, 9, 8, 0.97);
+  backdrop-filter: blur(18px);
+  display: none;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.42s ease, visibility 0.42s;
+}
+.menuOpen { opacity: 1; visibility: visible; }
+
+.menuInner {
+  width: 100%;
+  padding: 0 1.75rem;
+}
+
+.menuList { list-style: none; }
+
+.menuItem {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  border-bottom: 1px solid var(--border);
+}
+.menuOpen .menuItem { opacity: 1; transform: translateY(0); }
+
+.menuLink {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  width: 100%;
+  min-height: 56px;
+  padding: 0.5rem 0;
+  background: none;
+  border: none;
+  cursor: crosshair;
+  text-align: left;
+  font-family: var(--font-d), monospace;
+  font-size: 1.55rem;
+  letter-spacing: 0.03em;
+  color: var(--fg);
+}
+.menuLinkActive { color: var(--gold); }
+.menuIndex {
+  font-family: var(--font-b), monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  color: var(--fg-muted);
+}
+
+.menuCta {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 2.25rem;
+  padding: 0.95rem 1rem;
+  background: none;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  cursor: crosshair;
+  font-family: var(--font-b), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transition: background 0.25s, color 0.25s;
+}
+.menuCta:hover { background: var(--gold-dim); color: var(--fg); }
+
+.menuMail {
+  display: block;
+  margin-top: 1.5rem;
+  min-height: 44px;
+  padding-top: 0.7rem;
+  font-family: var(--font-b), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+  text-align: center;
+}
 
 /* ─────────────────────────────────────────────────────
    HERO — full-bleed arrival
@@ -1016,31 +1128,11 @@
   .nav { padding: 1rem 1.5rem; }
   .navLinks { display: none; }
 
-  /* The dots are the only route to Contact until the overlay menu lands.
-     Visual dot stays 5px; the button grows to a 44px tap target. */
-  .dots {
-    right: 0;
-    gap: 0;
-    pointer-events: none;
-  }
-  .dot {
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    display: grid;
-    place-items: center;
-    pointer-events: auto;
-  }
-  .dot::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border-mid);
-    transition: background 0.2s, transform 0.2s;
-  }
-  .dotActive { background: transparent; transform: none; }
-  .dotActive::before { background: var(--gold); transform: scale(1.5); }
+  /* The overlay menu is the mobile route now; the side dots would only
+     duplicate it and sit over the gallery's right edge. */
+  .dots { display: none; }
+  .navBurger { display: block; }
+  .menu { display: flex; }
 
   .heroBody { padding: 0 1.5rem 4.5rem; }
   .heroEyebrow { margin-bottom: 1.1rem; }

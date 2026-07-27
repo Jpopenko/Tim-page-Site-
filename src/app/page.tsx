@@ -114,36 +114,106 @@ export default function Home() {
 }
 
 /* ─── Nav ───────────────────────────────────────────── */
+const NAV_ITEMS: [string, string][] = [
+  ["work", "Work"],
+  ["about", "About Tim"],
+  ["media", "Media"],
+  ["contact", "Contact"],
+];
+
 function Nav({ active, scrollTo }: { active: string; scrollTo: (id: string) => void }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
+  // Escape closes; body scroll locks while the overlay owns the screen.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const go = (id: string) => { setMenuOpen(false); scrollTo(id); };
+
   return (
-    <nav className={`${s.nav} ${scrolled ? s.navScrolled : ""}`}>
-      <button className={s.navLogo} onClick={() => scrollTo("hero")}>TIM PAGE</button>
-      <div className={s.navLinks}>
-        {[["work","Work"],["about","About Tim"],["media","Media"],["contact","Contact"]].map(([id, label]) => (
+    <>
+      <nav className={`${s.nav} ${scrolled ? s.navScrolled : ""}`}>
+        <button className={s.navLogo} onClick={() => go("hero")}>TIM PAGE</button>
+        <div className={s.navLinks}>
+          {NAV_ITEMS.map(([id, label]) => (
+            <button
+              key={id}
+              className={`${s.navLink} ${active === id ? s.navLinkActive : ""}`}
+              onClick={() => scrollTo(id)}
+            >{label}</button>
+          ))}
+        </div>
+        <div className={s.navSocial}>
+          <a href="https://www.instagram.com/timpagephoto/?hl=en" target="_blank" rel="noreferrer" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
           <button
-            key={id}
-            className={`${s.navLink} ${active === id ? s.navLinkActive : ""}`}
-            onClick={() => scrollTo(id)}
-          >{label}</button>
-        ))}
+            className={s.navBurger}
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <span className={`${s.burgerBar} ${menuOpen ? s.burgerBarTop : ""}`} />
+            <span className={`${s.burgerBar} ${menuOpen ? s.burgerBarMid : ""}`} />
+          </button>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        className={`${s.menu} ${menuOpen ? s.menuOpen : ""}`}
+        aria-hidden={!menuOpen}
+      >
+        <div className={s.menuInner}>
+          <ul className={s.menuList}>
+            {NAV_ITEMS.map(([id, label], i) => (
+              <li key={id} style={{ transitionDelay: menuOpen ? `${120 + i * 55}ms` : "0ms" }} className={s.menuItem}>
+                <button
+                  className={`${s.menuLink} ${active === id ? s.menuLinkActive : ""}`}
+                  onClick={() => go(id)}
+                  tabIndex={menuOpen ? 0 : -1}
+                >
+                  <span className={s.menuIndex}>{String(i + 1).padStart(2, "0")}</span>
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <button className={s.menuCta} onClick={() => go("contact")} tabIndex={menuOpen ? 0 : -1}>
+            Enquire
+          </button>
+
+          <a
+            className={s.menuMail}
+            href="mailto:timpagephoto@bigpond.com"
+            tabIndex={menuOpen ? 0 : -1}
+          >
+            timpagephoto@bigpond.com
+          </a>
+        </div>
       </div>
-      <div className={s.navSocial}>
-        <a href="https://www.instagram.com/timpagephoto/?hl=en" target="_blank" rel="noreferrer" aria-label="Instagram">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="2" width="20" height="20" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
-      </div>
-    </nav>
+    </>
   );
 }
 
