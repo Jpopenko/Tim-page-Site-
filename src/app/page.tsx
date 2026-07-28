@@ -22,26 +22,57 @@ function useInView(threshold = 0.12) {
 }
 
 /* ─── Wix CDN portrait crop ─────────────────────────── */
-function wixThumb(url: string, w: number, h: number, q = 90): string {
+/* `crop` is the source rectangle to keep, chained BEFORE the fill so a
+   baked-in matte never survives into the slat (see Photo.crop below). */
+type Rect = readonly [x: number, y: number, w: number, h: number];
+
+function wixCropOp(crop?: Rect): string {
+  return crop ? `/v1/crop/x_${crop[0]},y_${crop[1]},w_${crop[2]},h_${crop[3]}` : "";
+}
+
+function wixThumb(url: string, w: number, h: number, q = 90, crop?: Rect): string {
   const filename = url.split("/").pop()!;
-  return `${url}/v1/fill/w_${w},h_${h},al_c,q_${q},enc_webp/${filename}`;
+  return `${url}${wixCropOp(crop)}/v1/fill/w_${w},h_${h},al_c,q_${q},enc_webp/${filename}`;
+}
+
+/* Full-size, matte trimmed — for the lightbox, which shows the whole frame. */
+function wixFull(url: string, crop?: Rect): string {
+  if (!crop) return url;
+  const filename = url.split("/").pop()!;
+  return `${url}/v1/crop/x_${crop[0]},y_${crop[1]},w_${crop[2]},h_${crop[3]},q_90,enc_webp/${filename}`;
 }
 
 /* ─── Photos ────────────────────────────────────────── */
-const PHOTOS = [
-  { id: 1,  src: "https://static.wixstatic.com/media/cf7196_f1439a16bade441a823deb4bb22decb0~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
+/* `crop` — several of Marianne's scans arrive with a solid matte baked into
+   the pixels (a 131px white border on the two Cambodia/Vietnam frames, black
+   bands on the Cambodia pair). The slat is a 1:5.6 sliver of full source
+   HEIGHT, so that matte lands as grey caps top and bottom and the slat reads
+   as short — the "mistake" look. Trimming to the picture area keeps every
+   slat the same ratio. Rects were measured off the originals; re-measure if a
+   src is swapped. */
+type Photo = {
+  id: number;
+  src: string;
+  loc: string;
+  tag: string;
+  year?: string;
+  crop?: Rect;
+};
+
+const PHOTOS: Photo[] = [
+  { id: 1,  src: "https://static.wixstatic.com/media/cf7196_f1439a16bade441a823deb4bb22decb0~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam",     crop: [0, 0, 1042, 752] },
   { id: 2,  src: "https://static.wixstatic.com/media/cf7196_9bb6057028a949a6a9507621856e4706~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 3,  src: "https://static.wixstatic.com/media/cf7196_f672487768064dadb78d2c3e0d1deda9~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 4,  src: "https://static.wixstatic.com/media/cf7196_1f3b4edaabb247f39bf425a0af821a2a~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
   { id: 5,  src: "https://static.wixstatic.com/media/cf7196_95faa9cb95244281bad0eb2a0b504051~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 6,  src: "https://static.wixstatic.com/media/cf7196_72c4316252a1463a911711288314febb~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam"     },
+  { id: 6,  src: "https://static.wixstatic.com/media/cf7196_72c4316252a1463a911711288314febb~mv2.jpg",  loc: "Vietnam",     tag: "Vietnam",     crop: [133, 133, 1553, 1014] },
   { id: 7,  src: "https://static.wixstatic.com/media/cf7196_f030896d28ff486fb1cdeeacf32d0a22~mv2.jpeg", loc: "Vietnam",     tag: "Vietnam"     },
-  { id: 8,  src: "https://static.wixstatic.com/media/cf7196_8d485fbb01874f3ca2776ddbbd1af57c~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  { id: 9,  src: "https://static.wixstatic.com/media/cf7196_36ac4138fc9e472eaad4f08c03f4e430~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
-  { id: 10, src: "https://static.wixstatic.com/media/cf7196_ed338448c6dc44b8ad9ab90dc7291c9e~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia"    },
+  { id: 8,  src: "https://static.wixstatic.com/media/cf7196_8d485fbb01874f3ca2776ddbbd1af57c~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia",    crop: [133, 133, 1553, 1014] },
+  { id: 9,  src: "https://static.wixstatic.com/media/cf7196_36ac4138fc9e472eaad4f08c03f4e430~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia",    crop: [65, 196, 3429, 4864] },
+  { id: 10, src: "https://static.wixstatic.com/media/cf7196_ed338448c6dc44b8ad9ab90dc7291c9e~mv2.jpg",  loc: "Cambodia",    tag: "Cambodia",    crop: [226, 52, 5444, 3592] },
   { id: 11, src: "https://static.wixstatic.com/media/cf7196_f313bd3436ed4c7486c7625d7b0486d1~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
   { id: 12, src: "https://static.wixstatic.com/media/cf7196_97cc50001ebc4d21b9c7825c8e74ecf2~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
-  { id: 13, src: "https://static.wixstatic.com/media/cf7196_bcb63d3909e64814a32fbf8f6dae9208~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964" },
+  { id: 13, src: "https://static.wixstatic.com/media/cf7196_bcb63d3909e64814a32fbf8f6dae9208~mv2.jpg",  loc: "Laos",        tag: "Laos",        year: "1964", crop: [0, 0, 1790, 1193] },
   { id: 14, src: "https://static.wixstatic.com/media/cf7196_c094fc6c464b4c2a8402f8049101c90c~mv2.jpg",  loc: "Afghanistan", tag: "Afghanistan" },
   { id: 15, src: "https://static.wixstatic.com/media/cf7196_9738d9b202be49a08df9412640d0d9d6~mv2.jpg",  loc: "Cuba",        tag: "Cuba"        },
 ];
@@ -230,7 +261,7 @@ function Hero({ scrollTo }: { scrollTo: (id: string) => void }) {
     <section id="hero" className={s.hero}>
       <div className={s.heroFrame}>
         <Image
-          src={wixThumb(photo.src, 2000, 1250, 88)}
+          src={wixThumb(photo.src, 2000, 1250, 88, photo.crop)}
           alt={`Tim Page — ${photo.tag}`}
           fill
           sizes="100vw"
@@ -311,7 +342,7 @@ function Gallery() {
   useEffect(() => {
     if (open === null) return;
     [(open + 1) % PHOTOS.length, (open - 1 + PHOTOS.length) % PHOTOS.length]
-      .forEach((i) => { const im = new window.Image(); im.src = PHOTOS[i].src; });
+      .forEach((i) => { const im = new window.Image(); im.src = wixFull(PHOTOS[i].src, PHOTOS[i].crop); });
   }, [open]);
 
   return (
@@ -339,7 +370,7 @@ function Gallery() {
                   aria-label={`View ${p.tag} photograph`}
                 >
                   <Image
-                    src={wixThumb(p.src, 256, 1440)}
+                    src={wixThumb(p.src, 256, 1440, 90, p.crop)}
                     alt={`Tim Page — ${p.tag}`}
                     fill
                     sizes="(min-width: 1200px) 200px, 128px"
@@ -372,7 +403,7 @@ function Gallery() {
               >
                 <div className={s.mobFrame}>
                   <Image
-                    src={wixThumb(p.src, 1000, 667)}
+                    src={wixThumb(p.src, 1000, 667, 90, p.crop)}
                     alt={`Tim Page — ${p.tag}`}
                     fill
                     sizes="86vw"
@@ -402,7 +433,7 @@ function Gallery() {
           <div className={s.lbInner} onClick={e => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={PHOTOS[open].src}
+              src={wixFull(PHOTOS[open].src, PHOTOS[open].crop)}
               alt={`Tim Page — ${PHOTOS[open].tag}`}
               className={s.lbImg}
             />

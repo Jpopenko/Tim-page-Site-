@@ -50,7 +50,15 @@ Navigation is scroll-based: `IntersectionObserver` watches each section, updates
 ### Images
 All images are served from `https://static.wixstatic.com/media/` — already whitelisted in `next.config.mjs`. The site fetches no images at runtime; all URLs are hardcoded in `PHOTOS`/`WIX`.
 
-`wixThumb(url, w, h)` builds the crop. Desktop slats request `256x1440` (1:5.6 — the
+Some of Marianne's scans carry a **solid matte baked into the pixels** — a 131px white
+border on ids 6 and 8, black bands on 9 and 10. Because a slat is a 1:5.6 sliver of the
+full source *height*, that matte lands as grey caps top and bottom and the slat reads as
+short, next to fifteen full-bleed neighbours. Those photos carry a `crop: [x, y, w, h]`
+rect (measured off the original, in source pixels) which is chained **before** the fill —
+`.../v1/crop/x_,y_,w_,h_/v1/fill/w_,h_,al_c,.../file.jpg`. The Wix CDN honours the two ops
+in one URL. Re-measure the rect if a `src` is swapped.
+
+`wixThumb(url, w, h, q, crop)` builds the crop. Desktop slats request `256x1440` (1:5.6 — the
 narrow ratio the hover ripple needs); the mobile carousel requests `1000x667` (3:2) from
 the same sources; the hero requests `2000x1250`. **The About portrait is 3998x2248
 (16:9)** — it was long declared `680x907`, a portrait ratio it never had.
