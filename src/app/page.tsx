@@ -308,6 +308,15 @@ function Ticker() {
 /* ─── Gallery constants ──────────────────────────────── */
 const SIGMA2 = 2.5; // Gaussian spread — single smooth peak, no secondary humps
 
+/* Mobile spread. Deliberately much tighter than SIGMA2, and not a mismatch:
+   the constant is in *card index* units, and the two layouts fit wildly
+   different numbers of cards on screen. Desktop shows ~15 slats at once, so a
+   wide spread paints a wave ACROSS the row. A phone shows one slide, so its
+   neighbours are a full screen away — the ripple is felt over TIME as slides
+   cross the centre, not across space. 0.28 puts the midpoint of a swipe at
+   ~0.4 and leaves the peeking neighbours clearly receded. */
+const MOB_SIGMA2 = 0.28;
+
 /* ─── Gallery (static row + hover ripple + lightbox) ── */
 function Gallery() {
   const [hov, setHov] = useState<number | null>(null);
@@ -321,6 +330,66 @@ function Gallery() {
 
   const prev = () => setOpen(o => o !== null ? (o - 1 + PHOTOS.length) % PHOTOS.length : null);
   const next = () => setOpen(o => o !== null ? (o + 1) % PHOTOS.length : null);
+
+  /* ── Mobile ripple ──────────────────────────────────
+     The desktop Gaussian, driven by scroll instead of a cursor. Touch has no
+     hover, so "where your attention is" becomes "what you've scrolled to the
+     centre" — same curve, same peak-is-colour language, different input.
+
+     Written straight to the DOM as a CSS var rather than through state: this
+     fires every frame of a swipe, and reconciling 15 slides at 60fps is how
+     you get jank on a mid-range phone. CSS falls back to --f:1 (today's
+     look), so desktop, reduced-motion and no-JS all render untouched. */
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const slides = Array.from(track.children) as HTMLElement[];
+    if (slides.length < 2) return;
+
+    /* Geometry is read on mount/resize only — never inside the scroll frame,
+       where touching offsetLeft would force a layout on every tick. */
+    let pitch = 0, firstCentre = 0, half = 0;
+    const measure = () => {
+      pitch = slides[1].offsetLeft - slides[0].offsetLeft;
+      firstCentre = slides[0].offsetLeft + slides[0].offsetWidth / 2;
+      half = track.clientWidth / 2;
+    };
+
+    let frame = 0;
+    const paint = () => {
+      frame = 0;
+      if (!pitch || !half) return; // display:none above 768px — nothing to drive
+      const peak = (track.scrollLeft + half - firstCentre) / pitch;
+      slides.forEach((el, i) => {
+        const d = i - peak;
+        const f = Math.exp(-(d * d) / MOB_SIGMA2);
+        /* Skip the write when nothing changed — the dozen slides parked
+           off-screen would otherwise restyle on every frame for nothing. */
+        const v = f < 0.002 ? "0" : f.toFixed(3);
+        if (el.dataset.f !== v) {
+          el.dataset.f = v;
+          el.style.setProperty("--f", v);
+        }
+      });
+    };
+
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(paint); };
+    const onResize = () => { measure(); paint(); };
+
+    measure();
+    paint();
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     if (open === null) return;
@@ -393,7 +462,7 @@ function Gallery() {
             ripple without a cursor — so mobile gets the same photographs as a
             swipeable carousel at a real aspect ratio instead of slivers. */}
         <div className={s.galMobile}>
-          <div className={s.mobTrack}>
+          <div className={s.mobTrack} ref={trackRef}>
             {PHOTOS.map((p, i) => (
               <button
                 key={p.id}

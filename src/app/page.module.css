@@ -458,6 +458,9 @@
   cursor: crosshair;
 }
 
+/* --f is the Gaussian falloff written by the scroll driver in page.tsx: 1 on
+   the slide at the centre of the viewport, ~0 on its neighbours. The fallback
+   of 1 is what desktop, reduced-motion and no-JS get — i.e. untouched. */
 .mobFrame {
   position: relative;
   width: 100%;
@@ -465,8 +468,18 @@
   overflow: hidden;
   background: var(--bg-warm);
   border: 1px solid var(--border-mid);
+  transform: scale(calc(0.93 + 0.07 * var(--f, 1)));
+  opacity: calc(0.5 + 0.5 * var(--f, 1));
 }
-.mobImg { object-fit: cover; }
+
+/* Peak is colour, the rest recede to grey — the same move .galImgColor makes
+   on the desktop slat under the cursor. */
+.mobImg {
+  object-fit: cover;
+  filter: grayscale(calc(100% - 100% * var(--f, 1)))
+          contrast(calc(1.12 - 0.12 * var(--f, 1)))
+          brightness(calc(0.82 + 0.18 * var(--f, 1)));
+}
 
 .mobCap {
   display: flex;
@@ -474,6 +487,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0.15rem 0;
+  opacity: calc(0.25 + 0.75 * var(--f, 1)); /* off-centre captions stop competing */
 }
 .mobTag {
   font-family: var(--font-b), monospace;
