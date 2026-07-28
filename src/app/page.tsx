@@ -475,7 +475,7 @@ function Gallery() {
                     src={wixThumb(p.src, 1000, 667, 90, p.crop)}
                     alt={`Tim Page — ${p.tag}`}
                     fill
-                    sizes="86vw"
+                    sizes="72vw"
                     quality={86}
                     className={s.mobImg}
                   />

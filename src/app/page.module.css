@@ -435,10 +435,14 @@
    never enter the viewport and never download. */
 .galMobile { display: none; }
 
+/* 14 + 72 + 14 = 100vw, so the centred slide sits dead centre and ~40px of
+   each neighbour stays on screen. That margin is the whole point: the ripple
+   needs something to act ON. At the old 86vw only a 15px sliver of the
+   neighbour was visible, so the falloff was real but invisible. */
 .mobTrack {
   display: flex;
   gap: 0.85rem;
-  padding: 0 7vw;
+  padding: 0 14vw;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
@@ -448,7 +452,7 @@
 .mobTrack::-webkit-scrollbar { display: none; }
 
 .mobSlide {
-  flex: 0 0 86vw;
+  flex: 0 0 72vw;
   scroll-snap-align: center;
   background: none;
   border: none;
