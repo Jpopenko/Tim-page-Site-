@@ -43,8 +43,29 @@ Navigation is scroll-based: `IntersectionObserver` watches each section, updates
   (slat row + ripple) and `.galMobile` (swipeable 3:2 carousel). The slats are narrow
   *because* the ripple needs them narrow, and there's no ripple without a cursor, so
   mobile gets its own treatment. Only one is ever in the layout, so the hidden one's
-  lazy images never intersect and never download. **The slat row + ripple are a locked
-  design element — do not replace them with a conventional grid.**
+  lazy images never intersect and never download (verified: a desktop load fires zero
+  `w_1000` requests). **The slat row + ripple are a locked design element — do not
+  replace them with a conventional grid.**
+- **Mobile has the same ripple, driven by scroll instead of a cursor.** Touch has no
+  hover, so "where your attention is" becomes "what you've scrolled to the centre." A
+  `scroll` listener on `.mobTrack` (rAF-throttled) writes the Gaussian falloff to each
+  slide as a CSS var `--f`; CSS spends it on scale, opacity and grayscale, so the
+  centred photo is in colour and its neighbours recede — the same move `.galImgColor`
+  makes on the desktop slat under the cursor. Geometry is measured on mount/resize
+  only, never inside the scroll frame.
+  - It's written to the DOM rather than through React state on purpose: this fires
+    every frame of a swipe, and reconciling 15 slides at 60fps janks a mid-range phone.
+  - `MOB_SIGMA2` (0.28) is *deliberately* far tighter than `SIGMA2` (2.5). The constant
+    is in **card-index units** and the layouts fit wildly different card counts —
+    desktop shows ~15 slats so the wave spreads across the row; a phone shows one, so
+    the ripple is felt over *time* as slides cross centre. Don't "fix" the mismatch.
+  - CSS falls back to `--f: 1`, which is an exact identity (scale 1, opacity 1,
+    `grayscale(0)`). Desktop, reduced-motion and no-JS therefore render untouched.
+  - **The slide width is load-bearing, not cosmetic.** At the original `86vw` only a
+    15px sliver of the neighbour was on screen, so the falloff was real but invisible —
+    at rest the page looked identical to no effect at all. `72vw` (with `padding: 0
+    14vw`, so 14+72+14 = 100vw and it still centres) keeps ~40px of each neighbour
+    visible. Widen it and the ripple silently stops reading. Keep `sizes` in step.
 - Lightbox: full-screen overlay, body scroll lock, Escape/arrow key handlers in `useEffect`
 
 ### Images
@@ -90,6 +111,11 @@ Use `metaSiteId` (from editor URL) not account ID as `wix-site-id`. Token format
   site's voice — Jay's and Marianne's call.
 - Optional: bump Next.js (npm audit flags framework-level advisories; only fix is
   the breaking `next@16` major — defer to a planned upgrade).
+- **Tap targets still under 44px at 390px** (found 2026-07-28, after `c28c529` was
+  titled "clear the 390px gate"): the four contact fields — `name`, `email`, `image`,
+  `usage` — are 38px tall, and `/privacy` has two short inline links ("← Back to site"
+  134×19, the email link 219×17). No horizontal overflow anywhere. Small, Claude-fixable.
+- Resync `package-lock.json` (see Production build) so `npm ci` works again.
 
 ### Resolved
 - ~~Gallery has only 4 unique photos~~ — 276 images discovered across 13 Wix Media Manager folders (Vietnam, Cambodia, Laos, Afghanistan, Cuba); the gallery now runs **15** unique images.
@@ -124,3 +150,18 @@ Commit after every change or major feature — don't batch multiple unrelated ch
 docker build --target runner -t tim-wix-prod .
 docker run -p 3000:3000 tim-wix-prod
 ```
+
+**Use that, not `npm run build` inside the dev container.** `docker-compose.yml` pins
+`NODE_ENV=development`, so a production build there mixes Next's dev and prod runtimes and
+dies with `Cannot read properties of null (reading 'useContext')` or `<Html> should not be
+imported outside of pages/_document`, failing every prerendered path. **Neither error means
+your code is broken** — the `runner` target above builds the same code cleanly. Running
+`npm run build` while `next dev` is live also corrupts the shared bind-mounted `.next`;
+`rm -rf .next` after.
+
+`npm ci` fails too: `package-lock.json` is missing `@vercel/analytics`, which is in
+`package.json`. Nothing is broken today because the Dockerfile and Vercel both use `npm
+install`, but any CI that uses `npm ci` will fail until someone re-runs `npm install`.
+
+There is no lint step. `next lint` has never been configured, so it drops into an
+interactive ESLint setup prompt rather than linting.
